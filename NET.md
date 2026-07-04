@@ -1,18 +1,5 @@
 # .NET Core
-基础web app
-```C#
-var builder = WebApplication.CreateBuilder(args);
-var app = builder.Build();
 
-app.UseHttpsRedirection();
-app.UseRouting();
-app.MapStaticAssets();
-app.UseAuthentication();
-app.UseAuthorization();
-app.MapGet("/", () => "Hello World!");
-
-app.Run();
-```
 
 
 # CREATE.NET PROJECT
@@ -27,12 +14,13 @@ dotnet list package --include-transitive //查看所有以安装的包（包括�
 dotnet restore //手动还原依赖包
 dotnet remove package 包名 //清理掉不用的包
 ```
-## 步骤
+## 创建.NET Core Project 步骤
+VSCODE 中：
 - Command Palette: Ctrl+Shift+P 
 - type ".NET" 
 - .NET: New Project + ASP.NET Core Empty project 
 
-## .NET template file 
+## .NET template 各文件作用 
 ### .sln
 多项目容器：构建信息 设置。。。
 ### obj folder
@@ -81,7 +69,7 @@ Kestrel = .NET 自带的 Web 服务器，就像一个"门卫"，专门负责接�
 
 ### Request 处理
 
-middleware pipeline = 可以理解成"流水线"，请求进来后要经过一道道检查（验证身份？记日志？找路由？）
+middleware pipeline = "流水线"，请求进来后要经过一道道检查（验证身份？记日志？找路由？）
 
 路由 routing = 判断请求的网址对应哪段代码，比如 / 对应 "Hello World!"
 
@@ -106,6 +94,7 @@ app.Run(async context =>
 app.Run();
 ```
 - Chaining：按照middleware的添加顺序执行
+
 ```C#
 app.Use() //terminal/non-terminal
 await next.Invoke() //把控制权传给下一个中间件。
@@ -114,13 +103,14 @@ await next.Invoke() //把控制权传给下一个中间件。
  next.Invoke() 
  //Invoke之后代码：下一个中间件执行后运行。
 
+app.MapGet()
 app.Run() //永远是terminal，不会调用下一个中间件，是添加终端中间件的快捷方式
 ```
 内置middleware
 ```C#
-UseExceptionHandler() //捕获异常并返回错误页面app.
-UseHsts() //设置 HTTPS 安全头app.
-UseHttpsRedirection() //将 HTTP 请求重定向到 HTTPS
+app.UseExceptionHandler() //捕获异常并返回错误页面app.
+app.UseHsts() //设置 HTTPS 安全头
+app.UseHttpsRedirection() //将 HTTP 请求重定向到 HTTPS
 app.UseAntiforgery() //防止跨站请求伪造攻击（CSRF）
 ```
 
