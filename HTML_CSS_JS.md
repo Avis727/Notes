@@ -36,3 +36,12 @@ F12或右键检查
 ```:root``` 选择器表示 HTML 页面中的 所有```<html>``` 元素
 
 # JAVAScript
+使用 HTML 脚本标记 `<script>`（script + TAB），链接到外部 JavaScript 文件
+
+可以将 `<script>`元素放在` <head> `或 `<body>` 中的其他位置。 但是，通过将 `<script>` 元素放在 `<body> `部分的末尾，可以先在屏幕上显示所有页面内容，然后再加载脚本。
+
+## 容错
+HTML 文件中的 `<noscript>`：在停用 JavaScript 时显示消息
+
+## 设置严格模式
+在 Visual Studio Code 中，打开 app.js 文件并输入以下内容：`'use strict';`
