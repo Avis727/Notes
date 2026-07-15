@@ -1,8 +1,20 @@
 # 初始化
 - 下载 Node.js
 
-Component：组件是一段可重用的代码，它代表用户界面的一部分。组件用于渲染、管理和更新应用程序中的 UI 元素。
+Component：一段可重用的代码，它代表用户界面的一部分
+```JavaScript
+function ...(){
+}
+```
 
+Property：传给组件的数据叫 Props（Properties的缩写）
+```JavaScript
+<Profile name="小明" age={18} />
+```
+
+`onSomething` 代表 events
+
+`handleSomething` 代表 function which handle those events
 
 # 运行步骤
 ```JavaScript
@@ -35,8 +47,11 @@ export default function Square() {
 
 # 各类文件后缀
 - TypeScript：比JavaScript多了Type
-- JSX： JavaScript 代码和 HTML 标签的组合
+- JSX： JavaScript 代码{}和 HTML 标签<>的组合
 - .tsx = TypeScript + JSX
 - .ts：普通TypeScript
 - .js：普通JavaScript
 - .jsx：JavaScript + JSX
+
+# React 开发者工具
+React开发者工具可以让你检查React组件的props和状态。它有Chrome、Firefox和Edge浏览器扩展程序版本。
