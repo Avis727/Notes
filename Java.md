@@ -5,15 +5,28 @@
 
 检验：win + R + cmd 打 `javac + 回车`
 
+# 杂七杂八
+## round
+```Java
+// 向上取整
+Math.ceil(number);
+
+// 向下取整
+int a / b; //ab=int
+Math.floorDiv(a, b);
+
+// 四舍五入
+Math.round(number);
+```
+
 # Lab1 
 
 ## Variable & Literal
 ```Java
-// 先声明类型
+// 先声明class
 int x = 1
 int x 
 x = 1
-
 // final=constant不可修改
 final int x = 1
 ```
@@ -34,16 +47,13 @@ final int x = 1
 ![](/images/Java_2026-07-21-17-53-53.png)
 
 ### Integer Data Type
-- byte
-- short 
-- int
-- long
+byte1 < short2 < int4 < long8
 
 不能用，. 0开头
 
 ### Floating Point Data Type
-- float：单精度 7位小数
-- double（默认）：双精度 15位小数
+- float：单精度4b 7位小数
+- double（默认）：双精度8b 15位小数
 ```Java
 double d = 12.7;   // 正常
 float f = 12.7;    // ❌ 会报错！因为 12.7 默认是 double，不能直接赋值给 float
@@ -78,3 +88,101 @@ Level myVar = Level.MEDIUM;
 
 - Reference Type：数量无限，memory里是地址，赋值时多个变量指向同一个对象
 - Primitive Type：数量有限，memory里是数据，赋值时创建副本
+
+## 类型转换
+### Implicit
+小 - 大
+```Java
+double d = 4.9;
+int i = 10;
+double d1, d2;
+
+d1 = i; // d1=10.0
+d2 = (double) i;
+```
+
+### explicit
+大 - 小
+```Java
+double d = 4.9;
+int i = 10;
+double i2;
+
+i2 = (int) d;
+```
+
+## String Class
+char ascii (A=65 a=97) <-> int/double
+```Java
+String string = "a";
+// string -> int/double
+// static method, provided by string class
+Integer.parseInt(string); 
+Double.parseDouble(string);
+
+//int -> string
+Integer.toString(integer);
+String.valueOf(integer)
+
+// string method
+// instance method, provided by string
+.split() // return array of substrings
+.charAt(index) //return string
+.substring(start, end+1) // return substring
+```
+![alt text](image-1.png)
+
+## StringBuffer Class
+mutable
+```Java
+StringBuffer stringbuffer = new StringBuffer();
+
+.append(data);
+.reverse();
+```
+
+## Console Output
+### printf() & printIn()
+```Java
+System.out.printf(模板 [值，值，值]);
+System.out.printf("%.2f...%.3f..", num1, num2)
+System.out.println("")// 自动换行
+```
+Format：%（格式开始符）+ 转换符
+
+`%[对齐方式：-是左对齐，什么都不加是右对齐][width：一个整数][.precision][参数大小]转换符`
+![](/images/Java_2026-07-22-19-08-15.png)
+
+放在output里：
+![alt text](image.png)
+
+## Get Input
+```Java
+// 导入Scanner class
+import java.util.Scanner;
+
+// new: create object
+// System.in = keyboard
+Scanner console = new Scanner(System.in);
+
+int age = console.nextInt();
+```
+```Java
+// read input
+.nextInt()
+.nextDouble()
+.next()
+.nextLine()
+```
+
+## 运行
+```Java
+public class [fileName]{
+    public static void main(String[] args){
+        System.out.printIn("hello");
+    }
+}
+//system: class
+//out: object
+// printIn: method
+```
