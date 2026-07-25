@@ -135,10 +135,11 @@ String.valueOf(integer)
 ## StringBuffer Class
 mutable
 ```Java
-StringBuffer stringbuffer = new StringBuffer();
+StringBuffer stringbuffer = new StringBuffer(word);
 
 .append(data);
 .reverse();
+.toString();
 ```
 
 ## Console Output
