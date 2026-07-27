@@ -105,7 +105,7 @@ git remote add origin https://github.com/你的用户名/MyGameRepo.git
 git add README
 git commit -m "commit of README file"
 
-//push到GITHUB
+//push到GITHUB，-u相当于set-upstream
 git push -u origin main     
 ```
 
@@ -113,20 +113,7 @@ git push -u origin main
 ```bash
 git clone https://github.com/user/repo-name
 ```
-
----
-
-## 7. GitHub 是什么？
-
-### GitHub Issues
-- `# + issueNumber` 可以引用过去issue
-- 提交信息中写 `Fixes #12` 可自动关联并在合并时关闭该 issue
-
----
-
-## 8. Fork 与 Pull Request（开源协作流程）
-
-常用于给别人的开源项目贡献代码：
+**Fork 与 Pull Request**
 
 1. **Fork** 原仓库到自己账号下
 2. **Clone** 到本地
@@ -136,6 +123,20 @@ git clone https://github.com/user/repo-name
 6. 原作者审核通过后 **Merge** 合并你的改动
 
 ---
+
+## 7. GitHub 功能
+
+### GitHub Issues
+- `# + issueNumber` 可以引用过去issue
+- 提交信息中写 `Fixes #12` 可自动关联并在合并时关闭该 issue
+
+### GitHub Project
+记录本
+
+
+---
+
+
 
 ## 9. 团队协作模式图解
 
