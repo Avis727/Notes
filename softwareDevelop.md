@@ -71,58 +71,12 @@ mindset + 4 values + 12 principles + practices (scrum XP custom)
 Working    Staging    Local        Remote
 Directory   Area    Repository   Repository
 ```
----
 
-## 5. 常用 Git 命令速查
-
-| 命令 | 作用 |
-|---|---|
-| `git init` | 创建一个新的空仓库 |
-| `git clone <url>` | 从远程克隆一个仓库到本地 |
-| `git add <文件>` | 把文件加入暂存区 |
-| `git commit -m "说明"` | 提交暂存区内容并写提交信息 |
-| `git status` | 查看当前状态（分支/改动情况） |
-| `git branch` | 查看本地/远程有哪些分支 |
-| `git checkout <分支/提交>` | 切换分支或某个历史提交 |
-| `git push` | 把本地提交推送到远程仓库 |
-| `git fetch` | 下载远程仓库最新数据（不合并） |
-| `git merge` | 合并两条开发历史 |
-| `git pull` | 拉取远程更新并自动合并 |
+git 不记录 binary file, PDF, .JPG, .PNG, .log, .lib
 
 ---
 
-## 6. 实战示例
 
-**本地创建 并提交仓库：**
-```bash
-//本地创建空仓库
-mkdir MyGameRepo
-cd MyGameRepo
-git init
-
-//链接GITHUB和本地仓库
-git remote add origin https://github.com/你的用户名/MyGameRepo.git
-git add README
-git commit -m "commit of README file"
-
-//push到GITHUB，-u相当于set-upstream
-git push -u origin main     
-```
-
-**克隆已有仓库：**
-```bash
-git clone https://github.com/user/repo-name
-```
-**Fork 与 Pull Request**
-
-1. **Fork** 原仓库到自己账号下
-2. **Clone** 到本地
-3. 本地开发、修改（Contribute）
-4. **Push** 到自己的远程仓库
-5. 提交 **Pull Request** 通知原作者
-6. 原作者审核通过后 **Merge** 合并你的改动
-
----
 
 ## 7. GitHub 功能
 
@@ -134,11 +88,16 @@ git clone https://github.com/user/repo-name
 记录本
 
 
----
-
-
-
 ## 9. 团队协作模式图解
 
 每个人：clone 项目 → 本地修改 → commit → push 到共享的远程仓库
+
+## PYTHON
+```python
+// 打包并导出环境
+pip freeze > requirements.txt
+
+// 下载环境
+pip install -r requirements.txt
+```
 

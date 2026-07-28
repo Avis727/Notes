@@ -41,11 +41,13 @@ String.valueOf(integer)
 
 // string method
 // instance method, provided by string
-.split(分割物) // return array of substrings
+.split(分割物:\s) // return array of substrings
 .charAt(index) //return string
 .substring(start, end+1) // return substring
 .length()
 .equal(另一个string) //比较内容
+.concat(string) //链接
+strim() //  移除前后空格
 ```
 ![](/images/Java_![alt%20text](image-1.png).png)
 
