@@ -101,3 +101,87 @@ pip freeze > requirements.txt
 pip install -r requirements.txt
 ```
 
+# Domain Modeling
+
+## 1. 领域建模 (Domain Modeling)
+
+- **作用**：把需求翻译成软件组件
+  - **分析 (Analysis)**：定义系统及其需求
+  - **设计 (Design)**：基于需求推导出概念设计
+- 提供系统的**static structure**：classes？fields (variables)) & methods？class interrelated / interacted
+- 核心：捕捉主要**业务实体 (entities)** 及其**关系 (relationships)**
+
+---
+
+## 2. UML (Unified Modeling Language)
+
+- **UML (Unified Modeling Language)**：软件蓝图的标准表示法
+
+
+### UML 图分类
+- **结构图 (Structural)**：Class、Object、Component、Package、Deployment、Composite Structure、Profile
+- **行为图 (Behavioral)**：Use Case、Activity、State Machine、Interaction（Sequence、Communication、Timing、Interaction Overview）
+
+---
+
+## 3. Class Diagrams 组成部分
+
+### 结构元素
+| 元素 | 内容 |
+|---|---|
+| 类 (Class) | 类名 / 属性 / 方法 |
+| 接口 (Interface) | 协议（name+MethodName） |
+| 包 (Package) | 文件夹图标 |
+
+### Access Modifiers
+| 修饰符 | 符号 | Class | Package | Subclass | Global |
+|---|---|---|---|---|---|
+| public | `+` | ✅ | ✅ | ✅ | ✅ |
+| protected | `#` | ✅ | ✅ | ✅ | ❌ |
+| default | `~` | ✅ | ✅ | ❌ | ❌ |
+| private | `-` | ✅ | ❌ | ❌ | ❌ |
+
+### 关系类型
+
+- **继承 (Inheritance/Generalization)** ——>：class之间
+- **实现 (Realization/Implementation)** ---->：class→interface
+- **依赖 (Dependency)**----："临时使用"，实现细节
+- **关联 (Association)**——：对象间动态使用关系，默认双向
+- **聚合 (Aggregation)** ——<>："is part of"整体消失部分仍可存在
+- **组合 (Composition)**——<|>："is entirely made of"，随整体消亡
+
+![](/images/softwareDevelop_2026-07-31-01-06-11.png)
+---
+
+## 4. 类的识别（从需求 User Story）
+
+- **名词 (Nouns)** → **class, object, fields**
+- **动词 (Verbs)** → **methods**
+
+
+
+---
+
+## 5. 关系在代码中的实现
+
+
+
+
+### 关联的修饰
+- **Name**：通常是动词/动词短语，标注在关联线上（如 "owns", "registers"）
+- **角色 (Role)**：通常是名词/名词短语，标注在关联端点（如 "registeredKeeper"）
+- **多重性 (Multiplicity)**：标注参与对象数量
+
+| 含义 | 记法 |
+|---|---|
+| 恰好一个 | `1` |
+| 零或一个 | `0..1` |
+| 多个（零或多个） | `*` 或 `0..*` |
+| 一个或多个 | `1..*` |
+| 指定范围 | `2..4` |
+
+---
+
+
+
+

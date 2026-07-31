@@ -6,6 +6,13 @@
 检验：win + R + cmd 打 `javac + 回车`
 
 # 杂七杂八
+## 小技巧
+```java
+//in
+string.contains(substring);
+string.indexOf(character);
+```
+
 ## round
 ```Java
 // 向上取整 double
@@ -46,15 +53,19 @@ String.valueOf(integer)
 // instance method, provided by string
 .split(分割物:\s) // return array of substrings
 .charAt(index) //return string
+.substring(start)
 .substring(start, end+1) // return substring
 .length()
 .equal(另一个string) //比较内容
 .concat(string) //链接
 strim() //  移除前后空格
+.repeat(repeatNumber) // 相当于*
+
+Character.isUpperCase(char) // char=primitive 没有method 需要用class.method()
 ```
 ![](/images/Java_![alt%20text](image-1.png).png)
 
-## StringBuffer Class
+## StringBuffer/StringBuilder Class
 mutable
 ```Java
 StringBuffer stringbuffer = new StringBuffer(word);
@@ -63,13 +74,22 @@ StringBuffer stringbuffer = new StringBuffer(word);
 .reverse();
 .toString();
 ```
+---
 
+## Char Array Class
+mutable：频繁修改字符时方便
+```java
+//先变charArray再变回String
+char[] values = string.toCharArray();
+for (char ch : values)
+    System.out.print(ch);
+String newString = new String(values)
+```
 # Lab1 
 
 ## Variable & Literal
 ```Java
-// 先声明class
-int x = 1
+// 先声明 VariableType(className)
 int x 
 x = 1
 // final=constant不可修改
@@ -78,7 +98,8 @@ final int x = 1
 
 
 ## 变量类型：Ptimitive Data Type
-存储数据本身：`byte short int long double float boolean char`
+- 存储数据本身：`byte short int long double float boolean char`
+- 无 methods
 
 ### Integer Data Type
 byte(1 byte) < short(2 byte) < int(4 byte) < long(8 byte)
@@ -105,7 +126,9 @@ true false //小写
 ```
 
 ## 变量类型：Reference Types
-除了primitive type 都是 reference type，存储 address。只有reference type 可被调用method，primitive type 不能用 method
+- 除了primitive type 都是 reference type
+- 存储 address。
+- 可被调用method
 - array class enumeration（代表一组 constants 的 class）
 ```Java
 className variableName = new createClassObject(参数)
@@ -113,20 +136,20 @@ className variableName = new createClassObject(参数)
 String s1 = new String("candide");
 String s2 = s1.replace('d', 'p'); // 创建了新的string
 
-enum Level{
+enum EnumerationName{
     LOW,
     MEDIUM,
     HIGH
 };
-Level myVar = Level.MEDIUM;
+EnumerationName myVar = EnumerationName.MEDIUM;
 ```
 
-- Reference Type：数量无限，memory里是地址，赋值时多个变量指向同一个对象（地址）
-- Primitive Type：数量有限，memory里是数据，赋值时创建副本
+- Reference Type：memory里是地址，赋值时多个变量指向同一个对象（地址）
+- Primitive Type：memory里是具体数据，赋值时创建副本
 
 ## 类型转换
-### Implicit
-小 - 大：直接换
+### Implicit 小 - 大：直接换
+
 ```Java
 double d = 4.9;
 int i = 10;
@@ -136,8 +159,7 @@ d1 = i; // d1=10.0
 d2 = (double) i;
 ```
 
-### explicit
-大 - 小：加（类型）
+### explicit 大 - 小：加（类型）
 ```Java
 double d = 4.9;
 int i = 10;
@@ -147,9 +169,8 @@ int i2= (int) d;
 ## Console Output
 ### printf() & printIn()
 ```Java
-System.out.printf(模板 [值，值，值]);
-System.out.printf("%.2f...%.3f..", num1, num2)
-System.out.println("")// 自动换行
+System.out.printf("模板", 值，值，值);
+System.out.println("内容")// 自动换行
 ```
 Format：%（格式开始符）+ 转换符
 
@@ -183,12 +204,9 @@ int age = console.nextInt();
 ```Java
 public class [fileName]{
     public static void main(String[] args){
-        System.out.printIn("hello");
+        statement;
     }
 }
-//system: class
-//out: object
-// printIn: method
 ```
 
 # Lab 02
@@ -265,8 +283,8 @@ while (condition) {
 for (initialization; loopContinuationCondition; increment)
     statement;
 
-// initialization 声明并初始化控制变量
-// loopContinuationCondition 每次循环前判断，为 false 则结束 |
+// initialization 声明并初始化控制变量 执行一次
+// loopContinuationCondition 每次循环前判断，为 false 则结束 
 // increment 每次循环体执行完后运行 
 ```
 ⚠️ **注意点**
@@ -317,23 +335,6 @@ for (count = 1; count <= 10; count++) {
 // 输出: 1 2 3 4 6 7 8 9 10
 ```
 
-⚠️ **重要坑点**
-- `while`/`do-while`：continue **直接跳到条件判断**，如果 `i++` 写在 continue **之后**，则**永远不会执行** → 死循环！
-
-```java
-// 正确写法（for 不会死循环）
-for (; i < 4; i++) {
-    if (i == 2) continue;
-    System.out.print(i);
-}
-
-// 危险写法（while 会死循环！）
-while (j < 4) {
-    if (j == 2) continue;   // j==2时跳过下面的 j++，死循环
-    System.out.print(j);
-    j++;
-}
-```
 
 ### return
 - 结束当前**方法**，返回调用处。
@@ -379,11 +380,7 @@ number = shiftingValue + randomNumbers.nextInt(scalingFactor);
 
 # Lab03 Methods
 
-## 1. 简介
 
-- **实例方法 (Instance Method)**：作用于具体对象，通过 `对象引用.方法名()` 调用
-
-- 每个方法只做**一件事**，方法名要能表达这件事
 
 ## 2. 方法调用的三种形式
 | 形式 | 语法 | 示例 |
@@ -392,12 +389,16 @@ number = shiftingValue + randomNumbers.nextInt(scalingFactor);
 | 调用对象的方法 | `对象.methodName(参数)` | `s1.toUpperCase()` |
 | 调用类的静态方法 | `类名.methodName(参数)` | `Math.min(10, 2)` |
 
+## 1. 实例方法 (Instance Method)
+
+- **实例方法 (Instance Method)（非静态method）**：作用于具体对象，通过 `对象引用.方法名()` 调用
+
 ## 3. 静态方法 (Static Methods)
-- **不依赖任何对象的状态**，属于整个类
-- 通过 `类名.方法名()` 直接调用，**不需要创建对象**
+- **不依赖任何对象的状态**，属于整个类。通过 `类名.方法名()` 直接调用，**不需要创建对象**
 
 
-- 为什么 main 是 static？JVM 启动时要调用 `main`，但此时还没有创建任何对象。`static` 让 JVM **不用创建对象**就能调用 main
+
+- 为什么 main 是 static？JVM 启动时要调用 `main`，但此时还没有创建任何对象。`static` 让 JVM (Java Virtual Machine) **不用创建对象**就能调用 main
 （若漏写 `static`：**编译通过，但运行报错**）
 
 ## 4. 声明 Methods
@@ -407,18 +408,18 @@ public static 返回类型 方法名(参数列表) {
     return 表达式;   // 有返回值时
 }
 ```
-- **修饰符**：`public`（可被其他类调用）、`static`（无需对象即可调用）
+- **修饰符 (Modifier)**：`public`（可被其他类调用）、`static`（无需对象即可调用）
 - **返回类型**：`void` 表示无返回值
 - **参数**：局部变量，只在方法体内有效
 - **返回**的三种方式：
   1. 无返回值 → 执行到 `}` 或遇到 `return;`
   2. 有返回值 → `return 表达式;`，先算表达式再返回
+- **class variables = fields**
 
 
 ## 5. 方法调用栈 (Method-Call Stack)
-- 每次调用方法会压入一个 **(Activation Record)**，包含：返回地址，参数，局部变量
-- **LIFO（后进先出）**：调用顺序 A→B→C，返回顺序 C→B→A
-- 方法返回后，其栈帧被弹出，局部变量随之消失
+- 每次调用方法，系统创建 **(Activation Record)**并压栈，包含：返回地址，参数，局部变量
+- **LIFO（后进先出）**：调用顺序 A→B→C，返回顺序 C→B→A。方法返回后，栈被弹出，局部变量消失
 
 ## 6. 作用域 (Scope) 规则
 | 声明类型 | 作用域 |
@@ -428,7 +429,6 @@ public static 返回类型 方法名(参数列表) {
 | 参数 | 整个方法体 |
 | 字段 (field) | 整个类的所有方法 |
 
-- ⚠️ 同一方法内**不能**重复声明同名局部变量/参数（编译错误）
 - **遮蔽 (Shadowing)**：局部变量/参数与字段同名时，**局部的优先**
 
 ```java
@@ -445,9 +445,7 @@ public static void method() {
 
 ## 7. 方法重载 (Method Overloading)
 - 同一个类中可以有**同名方法**，只要**参数列表不同**（个数/类型/顺序）
-- **方法签名 = 方法名 + 参数列表**（不含返回类型！）
-- ❌ **返回类型不同、签名相同** → 编译错误
-- ❌ 参数**顺序不同但类型集合相同**（如 `(int,double)` vs `(double,int)`）易导致**调用歧义 (ambiguous)**
+- **方法签名（编译器看的） = 方法名 + 参数列表**（不含返回类型！）
 
 ```java
 public static void aMethod() { }
@@ -456,10 +454,7 @@ public static void aMethod(String y, int x, boolean z) { }  // ✅ 合法：签�
 ```
 
 ### 参数提升 (Argument Promotion)
-- 调用时若无精确匹配，编译器会**向"更宽"的类型自动转换**（只能升级，不能降级）：
-```
-byte/char → short/int → int → long → float → double
-```
+- 调用时若无精确匹配，编译器会**向"更宽"的类型自动转换**
 - 提升方向唯一时才自动选择；若产生**多个可能** → 编译错误 "reference is ambiguous"
 
 ```java
@@ -467,6 +462,101 @@ public static void m1(double a) { }
 public static void m1(short a) { }
 m1(20);   // 调用 m1(double)，因为 int 不能自动转 short
 ```
+# Lab 04 Arrays
+
+## 1. 数组基础
+- 数组只包含 **同一类型**
+- 数组是**object**（reference type）
+- 默认值：`int→0`，`boolean→false`，`String/对象→null`
+- 长度固定，创建后不可改变（`arr.length` 获取长度，无括号）
+- 越界访问 → 运行时抛出 `ArrayIndexOutOfBoundsException`
+
+## 2. 声明与创建
+```java
+// 声明（不分配内存）
+int[] a;          // 推荐写法
+int a[];          // 也合法
+
+// 创建（分配内存，初始化为默认值）
+a = new int[10];
+
+// 声明+创建 合并
+int[] a = new int[10];
+
+// 声明+初始化（用初始化列表，自动确定长度）
+int[] a = {1, 2, 3};
+int[] a = new int[]{1, 2, 3};
+```
+⚠️ **错误写法**：
+- `int[10] a;` —— 声明时不能指定长度
+- `new int[3]{1,2,3}` —— 用 `{}` 初始化时不能同时写长度
+
+## 3. 遍历数组
+```java
+// 普通 for（可修改元素）
+for (int i = 0; i < arr.length; i++) arr[i] = i;
+
+// 增强 for（只能读，不能修改元素！）
+for (int v : arr) System.out.println(v);
+```
+
+## 4. 数组比较与拷贝
+| 操作 | 效果 |
+|---|---|
+| `a == b` | 比较**引用**（地址），不是内容 |
+| `a.equals(b)` | ⚠️ 数组未重写 equals，等价于 `==`，不要用来比较内容 |
+| `Arrays.equals(a, b)` | 正确比较**元素内容** |
+| `a = b` | 只复制引用，两个变量指向同一数组 |
+| `System.arraycopy(src, srcPos, dest, destPos, len)` | 真正复制元素（dest 需提前创建） |
+
+## 5. Pass-by-Value（Java 全部是值传递）
+- **primitive**：传值的副本，方法内修改不影响外部变量
+- **reference（数组/对象）**：传的是**引用的副本**
+  - 通过引用**修改对象内部内容**（如 `arr[0]=10`）→ 外部可见
+  - 让参数**指向新对象**（如 `arr = new int[5]`）→ 外部不受影响
+- 传数组元素 `f(arr[i])`：相当于primitive，不影响原数组
+
+## 6. main 方法参数 & 可变参数
+```java
+public static void main(String[] args) { ... }   // 命令行参数存入 args
+
+public static double average(double... nums) {   // 可变参数，视为数组
+    // 只能放在参数列表最后，且只能出现一次
+}
+```
+
+## 7. 多维数组
+```java
+int[][] x = new int[5][7];        // 5行7列（矩形数组）
+int[][] y = { {1,2,3}, {4,5,6} }; // 数组初始化列表（嵌套）
+int[][][] z = new int[2][3][4];   // 三维数组
+```
+- `x.length` → 行数；`x[i].length` → 第 i 行的列数
+- 用已有一维数组构造二维数组时，存的是**引用**（共享数据，修改会互相影响）
+  - 如需独立副本，用 `.clone()`：`{a1.clone(), a2.clone()}`
+
+
+## 8. 不规则数组 (Ragged Array)
+- 每行长度可以不同
+```java
+int[][] b = new int[3][];       // 只声明行数
+b[0] = new int[2];
+b[1] = new int[3];
+b[2] = new int[1];
+
+// 或用初始化列表
+int[][] b = {{3,2}, {3,2,1}, {1}};
+```
+⚠️ 遍历时必须用 `y[row].length`（不能用固定长度或 `y.length` 代替列数）
+
+## 9. 对象数组
+```java
+Point[] p = new Point[3];   // 只创建数组，元素默认为 null
+p[0] = new Point(10, 20);   // 必须单独 new 每个元素
+p[1] = new Point(20, 30);
+```
+- 数组存的是**对象引用**，未初始化元素访问会抛 `NullPointerException`
+- `Point[] copy = p;` 只复制引用，`copy` 和 `p` 指向同一批对象
 
 
 
