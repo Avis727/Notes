@@ -13,9 +13,6 @@ model3：evolutionary：每个步骤间随时交流修改
 construction -> deployment
 
 # Agile
-- increment：modules(function)
-- iterative：持续feedback
-mindset + 4 values + 12 principles + practices (scrum XP custom)
 
 个体和互动	>	流程和工具
 可工作的软件	>	详尽的文档
@@ -181,7 +178,90 @@ pip install -r requirements.txt
 | 指定范围 | `2..4` |
 
 ---
+# Testing
 
+## 🔍 单元测试 (Unit Testing)
+
+- 属于 **White Box Testing**：测试者知道内部实现
+- 测试对象（Unit）可以是：
+  - a method / function
+  - complete class（需覆盖所有操作、所有属性的读写、所有可能状态）
+
+### 处理依赖 (Dependencies)
+- **Stub**：替代依赖的"假对象"
+- **Driver**：调用被测模块的"假调用者"
+
+---
+
+## 🔗 集成测试 (Integration Testing)
+
+- **定义**：测试两个及以上相互依赖的组件组合在一起时是否正常工作
+- 核心目标：**测试模块之间的接口**
+- Black Box / White Box / Gray Box 
+- 需要 stub 和 driver 辅助
+
+---
+
+## 🖥️ 系统测试 (System Testing)
+- 针对**完整、已集成的系统**
+- 评估**functional（具体功能）**和**non-functional（性能 scale）**
+
+## ✅ 验收测试 (Acceptance Testing)
+
+---
+
+## 🔄 测试驱动开发 TDD (Test-Driven Development)
+
+**Agile 实践**：
+```
+写测试 → 运行测试(失败) → 写代码让测试通过 → 运行测试 → 测试失败则修bug → 重复
+```
+**核心思想**：先写测试，再写实现代码
+
+---
+
+## 🐍 PyTest 自动化测试
+
+### 命名规则（自动发现测试）
+- **测试套件 (test suite)**：文件名以 `test` 开头或结尾，如 `test_robot.py`
+- **测试函数**：函数名以 `test_` 开头，如 `def test_append():`
+
+### 基本写法
+```python
+import pytest
+
+def test_that_passes():
+    assert True
+    assert list(reversed([1, 2, 3])) == [3, 2, 1]
+
+    # 测试是否抛出异常
+    with pytest.raises(ZeroDivisionError):
+        value = 100 / 0
+```
+- 用 Python 内置 `assert` 语句判断实际状态是否符合预期
+- 运行命令：`pytest test_文件名.py`
+
+### Fixture（夹具）
+用 `@pytest.fixture` 提供"初始化"的对象给测试函数：
+
+```python
+import pytest
+
+@pytest.fixture
+def new_list():
+    return list()
+
+def test_append(new_list):
+    new_list.append('Hi')
+    assert 'Hi' in new_list
+    assert len(new_list) == 1
+
+def test_len(new_list):
+    assert len(new_list) == 0   # 每次测试拿到的都是全新对象
+```
+
+⚠️ **重要原则**：**stateless（无状态）** 一个测试的结果不影响另一个测试。
+- 如果 fixture 用的是模块级共享对象（如 `the_list = list()`），要用 `yield` + 清理代码语句`the_list.clear()`
 
 
 

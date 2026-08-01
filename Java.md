@@ -60,6 +60,8 @@ String.valueOf(integer)
 .concat(string) //链接
 strim() //  移除前后空格
 .repeat(repeatNumber) // 相当于*
+.toCharArray();
+String newString = new String(values)//返char[]
 
 Character.isUpperCase(char) // char=primitive 没有method 需要用class.method()
 ```
@@ -76,15 +78,6 @@ StringBuffer stringbuffer = new StringBuffer(word);
 ```
 ---
 
-## Char Array Class
-mutable：频繁修改字符时方便
-```java
-//先变charArray再变回String
-char[] values = string.toCharArray();
-for (char ch : values)
-    System.out.print(ch);
-String newString = new String(values)
-```
 # Lab1 
 
 ## Variable & Literal
@@ -491,6 +484,10 @@ int[] a = new int[]{1, 2, 3};
 - `int[10] a;` —— 声明时不能指定长度
 - `new int[3]{1,2,3}` —— 用 `{}` 初始化时不能同时写长度
 
+## 3. Methods
+```java
+Arrays.toString(array)
+```
 ## 3. 遍历数组
 ```java
 // 普通 for（可修改元素）
