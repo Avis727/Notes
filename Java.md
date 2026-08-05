@@ -437,8 +437,7 @@ public static void method() {
 ```
 
 ## 7. 方法重载 (Method Overloading)
-- 同一个类中可以有**同名方法**，只要**参数列表不同**（个数/类型/顺序）
-- **方法签名（编译器看的） = 方法名 + 参数列表**（不含返回类型！）
+- 同一个类中可以有**同名方法**，只要**参数列表不同**（个数/类型/顺序）（不含返回类型！）
 
 ```java
 public static void aMethod() { }
@@ -526,34 +525,180 @@ public static double average(double... nums) {   // 可变参数，视为数组
 ```java
 int[][] x = new int[5][7];        // 5行7列（矩形数组）
 int[][] y = { {1,2,3}, {4,5,6} }; // 数组初始化列表（嵌套）
-int[][][] z = new int[2][3][4];   // 三维数组
+int[][] b = new int[3][];       // 不规则数组只声明行数
+b[0] = new int[2];
 ```
 - `x.length` → 行数；`x[i].length` → 第 i 行的列数
 - 用已有一维数组构造二维数组时，存的是**引用**（共享数据，修改会互相影响）
   - 如需独立副本，用 `.clone()`：`{a1.clone(), a2.clone()}`
-
-
-## 8. 不规则数组 (Ragged Array)
-- 每行长度可以不同
-```java
-int[][] b = new int[3][];       // 只声明行数
-b[0] = new int[2];
-b[1] = new int[3];
-b[2] = new int[1];
-
-// 或用初始化列表
-int[][] b = {{3,2}, {3,2,1}, {1}};
-```
-⚠️ 遍历时必须用 `y[row].length`（不能用固定长度或 `y.length` 代替列数）
+---
 
 ## 9. 对象数组
 ```java
 Point[] p = new Point[3];   // 只创建数组，元素默认为 null
 p[0] = new Point(10, 20);   // 必须单独 new 每个元素
-p[1] = new Point(20, 30);
 ```
 - 数组存的是**对象引用**，未初始化元素访问会抛 `NullPointerException`
 - `Point[] copy = p;` 只复制引用，`copy` 和 `p` 指向同一批对象
 
+# Lab 05 Classes and Objects
 
+## 3. 定义 class
+
+```java
+public class MyClass {
+    // 字段 (fields / attributes)
+    // 构造方法 (constructors)
+    // 方法 (methods)
+}
+```
+
+- `public` 类必须存在与类名相同的 `.java` 文件中
+- 类名、方法名、变量名都用 **camelCase**，类名首字母大写
+
+---
+## 5. class Constructor (`new`)
+
+```java
+public className(int x, int y) {
+    this.x = x;
+    this.y = y;
+}
+```
+
+- 方法名必须和**类名相同**，**没有返回类型**
+- 用 `new` 调用时自动执行
+- 可以**重载 (overload)**：多个构造方法，参数列表不同即可
+
+**默认构造方法：**：int → 0，boolean → false，引用类型（String等）→ null
+
+**构造方法互相调用（链式构造）：**
+```java
+public Point() {
+    this(0, 0);   // 调用另一个构造方法，必须放在第一行
+}
+```
+
+---
+
+## 7. Instance Method
+
+**Getter / Setter 规范：**
+```java
+public int getField() { return attribute; }              // 访问器 accessor
+public void setField(int arg) { this.Field = arg; } // 修改器 mutator
+```
+> 字段 `x` 对应方法名必须是 `getX()` / `setX()`
+
+---
+
+## 8. field & static method
+
+```java
+public class Stuff {
+    private static int x = 10;      // 类变量：所有对象共享
+    public static int getX() { ... } // 类方法
+}
+```
+
+| 对比 | instance | static |
+|---|---|---|
+| 归属 | 每个对象一份 | 整个类共享一份 |
+| 调用方式 | `对象名.方法()` | `类名.方法()` |
+| 能否访问对方 | 能访问 static 和实例成员 | **不能**直接访问实例变量/方法（因为可能还没有对象存在，也没有 `this`） |
+| 加载时机 | 创建对象时分配 | 类加载时就分配 |
+
+常见例子：`Math.round(2.3)`、`Integer.parseInt("123")`
+
+**典型用途：用 static 变量做计数器**
+```java
+public class SharedCounter {
+    private static int count;   // 全类共享
+    private int value;          // 每个对象独立
+    public SharedCounter(int value) {
+        this.value = value;
+        count++;                // 每 new 一次 +1
+    }
+}
+```
+---
+
+## 2. 创建 object
+
+```java
+Point p2 = new Point(23, 94);
+```
+
+1. **声明 (Declaration)**：`Point p;` —— 此时还没有对象，只是声明了一个引用变量
+2. **实例化 (Instantiation)**：`new` 关键字分配内存，返回对象引用
+3. **初始化 (Initialization)**：`new` 后紧跟构造方法调用，如 `Point(23,94)`
+
+> 💡 变量要么存basic type（int, boolean...），要么存**reference**。
+---
+## 4. Modifier (Visibility)
+
+| 修饰符 | 可访问范围 |
+|---|---|
+| `public` | 任何地方都能访问 |
+| `private` | 只能在类内部访问 |
+
+**一般原则：**
+- 对象的 field **一律 private**（数据隐藏 / 信息隐藏）
+- 供外部调用的方法一般 `public`
+- 只是内部辅助用的"帮助方法"不要设为 `public`
+
+---
+
+
+## 6. `this` 关键字
+
+| 用法 | 作用 |
+|---|---|
+| `this.x = x;` | 指 instance variable（class 外部对象） |
+| `this(...)` | 在构造方法第一行调用本类的另一个构造方法 |
+
+---
+
+## 9. enum（枚举）
+
+表示**一组固定的 instances**，有field & constructor & method
+
+```java
+enum Size {
+    SMALL(3), REGULAR(5), LARGE(7);   // 括号内是传给 constructor 的参数
+    /*
+    public static final Size SMALL   = new Size(3);  
+    public static final Size REGULAR = new Size(5);  
+    */
+
+    private final double price;
+    private Size(double p) {          // 构造方法必须 private，不允许在外部自己new instance
+        price = p;
+    }
+    public double getPrice() { return price; }
+}
+```
+
+**Methods**
+```java
+Size s = Size.SMALL;
+.getPrice();      // 3.0
+.ordinal();        // 0 （常量的位置序号，从0开始）
+.toString();       // "SMALL"
+Size.valueOf("LARGE");   // 返回 Size.LARGE
+Size.values();       // 返回包含所有常量的 array
+```
+
+**enum 要点：**
+- 常量顺序决定 `ordinal()` 的值
+
+---
+
+## 10. 常见易错点
+
+- ❌ `Author a = new Author();` 不存在默认构造
+- ❌ 字段设为 `public` —— 违反封装原则，应为 `private` + getter/setter
+- ✅ `System.out.println(obj)` 会自动调用对象的 `toString()` 
+
+---
 

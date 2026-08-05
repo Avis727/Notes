@@ -103,10 +103,6 @@ pip install -r requirements.txt
 ## 1. 领域建模 (Domain Modeling)
 
 - **作用**：把需求翻译成软件组件
-  - **分析 (Analysis)**：定义系统及其需求
-  - **设计 (Design)**：基于需求推导出概念设计
-- 提供系统的**static structure**：classes？fields (variables)) & methods？class interrelated / interacted
-- 核心：捕捉主要**业务实体 (entities)** 及其**关系 (relationships)**
 
 ---
 
@@ -223,22 +219,23 @@ pip install -r requirements.txt
 ## 🐍 PyTest 自动化测试
 
 ### 命名规则（自动发现测试）
-- **测试套件 (test suite)**：文件名以 `test` 开头或结尾，如 `test_robot.py`
-- **测试函数**：函数名以 `test_` 开头，如 `def test_append():`
+- **测试套件 (test suite)**：文件名 `test_name.py`
+- **测试函数**：`def test_functionName()`
 
 ### 基本写法
 ```python
 import pytest
 
 def test_that_passes():
-    assert True
-    assert list(reversed([1, 2, 3])) == [3, 2, 1]
+    assert boolExpression
 
     # 测试是否抛出异常
-    with pytest.raises(ZeroDivisionError):
-        value = 100 / 0
+    with pytest.raises(ErrorName):
+      Track(
+
+      )
+
 ```
-- 用 Python 内置 `assert` 语句判断实际状态是否符合预期
 - 运行命令：`pytest test_文件名.py`
 
 ### Fixture（夹具）
@@ -262,6 +259,188 @@ def test_len(new_list):
 
 ⚠️ **重要原则**：**stateless（无状态）** 一个测试的结果不影响另一个测试。
 - 如果 fixture 用的是模块级共享对象（如 `the_list = list()`），要用 `yield` + 清理代码语句`the_list.clear()`
+
+# CS235 Lab 02 速查表 — 领域建模 (Domain Modelling)
+
+## 1. Python 特殊方法（Dunder Methods）
+
+| 方法 | 作用 |
+|---|---|
+| `__init__(self)` | 构造函数，创建对象时调用 |
+| `__repr__(self)` | 返回可自定义的对象“官方”表示 |
+| `__str__(self)` | 返回人类可读的字符串（`print()` 调用） |
+| `__eq__(self, other)` | 判断两个对象是否相等（`==`） |
+| `__hash__(self)` | 返回哈希值（用于 dict/set 的 key） |
+| `__lt__(self, other)` | 定义小于号 `<` 的比较逻辑 |
+
+```python
+a + b   # 调用 a.__add__(b)
+```
+
+---
+
+## 2. 封装（Encapsulation）与属性（Properties）
+
+**封装三要素**
+- Getter：读取属性
+- Setter：修改属性（可加校验）
+- 访问修饰符：控制可见性
+
+**Python 访问修饰符（仅约定，不强制）**
+
+| 写法 | 含义 | 意图 |
+|---|---|---|
+| `name` | 公开 (Public) | 任何地方都可访问 |
+| `_name` | 受保护 (Protected) | 仅类内部及子类使用 |
+| `__name` | 私有 (Private) | 不应在类外直接访问（触发名称改写 Name Mangling） |
+
+**@property 用法**：让 `obj.attribute` 语法背后调用方法，比 `obj.get_name()` 更简洁。
+
+```python
+# 内部情况
+class Student:
+    def __init__(self, name, upi):
+        self.name = name
+        self.upi = upi
+
+    @property (getter)
+    def fullname(self):
+        return self.name
+
+    @fullname.setter
+    def fullname(self, name):
+        self.name = name
+
+# 使用
+student1.fullname          # 调用 getter
+student1.fullname = "Joe"  # 调用 setter
+```
+
+⚠️ `__attr`会被 python自动改写为 `_ClassName__attr`，从外部直接用 `obj.__attr` 会报 `AttributeError`
+```python
+class ExampleMangling:
+    def __init__(self):
+        self.__secret = "hidden"
+
+e = ExampleMangling()
+print(e.__secret)                     # ❌ 报错！AttributeError
+
+print(e._ExampleMangling__secret)     # ✅ 可以，但很丑
+# 输出: hidden
+```
+
+---
+
+## 3. 类图（Class Diagrams）
+
+类图展示：**类 + 属性 + 方法 + 关系（如多重性 `*`、`1...4`）**
+
+
+**从图到代码的关键点**
+- `__` 开头属性 → 私有，通常用 `@property` 暴露
+- `_` 开头属性 → 受保护，可直接读，setter 需校验时才封装
+- 领域方法（如 `add_student`, `enroll_course`）内部要做业务规则校验，异常时 `raise` 自定义错误（如 `EnrollmentError`, `CourseFullError`）
+
+---
+
+## 4. 测试驱动开发（TDD）
+
+**核心循环（红-绿循环）**
+
+1. **写一个会失败的测试**（先定义“应该做什么”）
+2. **写最少量代码让测试通过**（再实现“怎么做”）
+3. 重复，不断迭代，不是一次性的checklist
+
+```
+写测试 → 跑测试(失败,红色) → 写实现代码 → 跑测试(通过,绿色) → 下一个问题
+```
+
+**写测试前要问的问题（以 Genre 类为例）**
+- 这个类需要哪些字段？是否都是必填？
+- 什么样的输入是无效的？（校验规则）
+- 对象之间的关系是什么？（如某 track 属于哪个 genre）
+
+**保持测试常跑**：改动代码后如果破坏了已测试过的规则，旧测试会立刻失败提醒你（回归测试思想）。
+
+**示例流程**
+
+```python
+# 1. 先写测试（此时 Genre 类还不存在/不完整）
+import pytest
+from model.Genre import Genre
+
+def test_genre_is_created_with_id_and_name():
+    genre = Genre(genre_id="G001", name="Pop")
+    assert genre.genre_id == "G001"
+    assert genre.name == "Pop"
+# 运行 -> FAILED: AttributeError
+
+# 2. 实现最简代码使其通过
+class Genre:
+    def __init__(self, genre_id: str, name: str):
+        self.__genre_id = genre_id
+        self.__name = name
+        self.__tracks = []
+
+    @property
+    def genre_id(self):
+        return self.__genre_id
+
+    @property
+    def name(self):
+        return self.__name
+
+    @name.setter
+    def name(self, new_name: str):
+        if not new_name or not new_name.strip():
+            raise ValueError("Genre name cannot be empty")
+        self.__name = new_name
+# 运行 -> PASSED
+```
+
+---
+
+## 5. 本次 Lab 任务：音乐库应用（Music Library）
+
+**业务需求**
+- 用户可按 **genre**（流派）浏览 tracks
+- 每个 track 含：title, duration, artist, album 等详细信息
+- 用户可按 title/artist/album 等搜索 tracks
+- 用户可收藏 tracks，并对听过的 tracks 打分/评论
+
+### Task 1 — TDD
+- 为 `Track` 类写 **至少 3 个测试**
+- 此时应该全部 **失败**（因为 Track 还没实现）
+- 完成 Task 2 后应全部 **通过**
+
+### Task 2 — 实现领域模型
+
+**`Track` 类字段**
+- Unique ID, Title, Artist, Album, Year
+- Composers（列表）, Lyrics, Duration
+- Associated Genres, Producers（列表）
+
+**`Genre` 类字段**
+- Unique ID, Name, 关联的 tracks 列表
+
+关系：`Track` *——* `Genre`（多对多）
+
+**使用领域模型（演示流程）**
+1. 创建若干 tracks，打印
+2. 创建两个 genres，打印
+3. 把 tracks 加入对应 genre，打印每个 genre 及其关联的 tracks
+
+---
+
+## 6. 速记要点 Checklist
+
+- [ ] `__init__` 初始化所有属性
+- [ ] 私有属性用 `__`，受保护用 `_`，配合 `@property` 暴露
+- [ ] 需要校验的属性写 `@x.setter` 并 `raise ValueError`
+- [ ] 实现 `__str__` / `__eq__`（必要时 `__hash__`, `__repr__`）
+- [ ] 领域方法中做业务规则校验，违反则抛自定义异常
+- [ ] 先写测试再写实现（TDD），保持测试集持续运行
+- [ ] 多对多关系（如 Track↔Genre）需要双向维护列表
 
 
 
