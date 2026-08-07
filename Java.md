@@ -714,3 +714,373 @@ EnumName.values();       // 返回包含所有常量的 array
 
 ---
 
+# Java ArrayList 速查表 (CompSci 230)
+
+## 1. 基本概念
+
+- `ArrayList` 属于 **集合(Collection)**，用于存储对象，自动管理增删改查
+- 只能存储 **对象**，不能直接存储基本数据类型（int、boolean等）
+- 有两个关键属性：
+  - **size**：当前实际存储的元素个数
+  - **capacity**：内部数组分配的容量（可自动扩容）
+
+```java
+import java.util.ArrayList;
+
+ArrayList<String> list = new ArrayList<String>();
+list.add("apple");
+
+ArrayList<Integer> nums = new ArrayList<Integer>();
+```
+
+---
+
+## 2. 泛型 (Generics)
+
+- `<E>` 是占位符，创建时指定存储的数据类型
+- Java 5 起推荐写法：
+
+```java
+ArrayList<String> words = new ArrayList<String>();
+```
+
+- ⚠️ 旧写法 `ArrayList words = new ArrayList();` 不推荐（无类型检查）
+- 只能加入指定类型的对象，加入其他类型会报错
+
+---
+
+## 3. 常用方法一览
+
+| 方法 | 作用 |
+|---|---|
+| `add(E x)` | 在末尾添加元素 |
+| `add(int index, E x)` | 在指定位置插入元素，其余元素后移 |
+| `get(int index)` | 获取指定位置的元素 |
+| `set(int index, E x)` | 替换指定位置的元素，返回旧元素 |
+| `remove(int index)` | 按索引删除元素，返回被删除元素 |
+| `remove(Object x)` | 按值删除第一个匹配元素，返回true/false |
+| `contains(E x)` | 是否包含某元素 |
+| `indexOf(E x)` | 第一次出现的索引，找不到返回-1 |
+| `lastIndexOf(E x)` | 最后一次出现的索引 |
+| `size()` | 返回元素个数 |
+| `isEmpty()` | 是否为空 |
+| `clear()` | 清空所有元素 |
+| `toString()` | 转成字符串，如 `[One, Two, Three]` |
+| `trimToSize()` | 把容量裁剪到当前元素个数 |
+| `equals(Object o)` | 大小和元素顺序都相同才为true |
+
+### 索引越界
+`get()` / `set()` / `remove(int)` 的 index 必须满足 `0 <= index < size()`，否则抛出 `IndexOutOfBoundsException`
+
+---
+
+## 4. 遍历方式
+
+```java
+// 普通for循环
+for (int i = 0; i < list.size(); i++) {
+    System.out.println(list.get(i));
+}
+
+// 增强for循环 (for-each)
+for (String value : list) {
+    System.out.println(value);
+}
+```
+
+---
+
+## 5. 包装类 (Wrapper Classes)
+
+基本类型不是对象，需要包装类转换：
+
+| 基本类型 | 包装类 |
+|---|---|
+| boolean | Boolean |
+| char | Character |
+| byte | Byte |
+| short | Short |
+| int | Integer |
+| long | Long |
+| float | Float |
+| double | Double |
+
+### 常用转换方法
+
+```java
+// 值/字符串 → 对象
+Integer i1 = Integer.valueOf(42);
+Integer i2 = Integer.valueOf("42");
+
+// 对象 → 值
+System.out.println(i1.intValue());   // 42
+
+// 字符串 → 值 (parse)
+Integer.parseInt("42");        // 42
+Boolean.parseBoolean("true");  // true
+Double.parseDouble("2.71");    // 2.71
+```
+
+### 自动装箱/拆箱 (Autoboxing / Autounboxing)
+
+Java 5起，int ↔ Integer 等自动互相转换：
+
+```java
+ArrayList<Integer> numbers = new ArrayList<Integer>();
+numbers.add(12);   // autoboxing: int → Integer
+int sum = 0;
+for (int i : numbers) {   // autounboxing: Integer → int
+    sum += i;
+}
+```
+
+---
+
+## 6. ArrayList vs Array 对比
+
+| 特性 | Array | ArrayList |
+|---|---|---|
+| 容量 | 固定，创建后不可变 | 自动扩容 |
+| 存储类型 | 基本类型 + 对象 | 只能是对象 |
+| 元素个数 | `array.length` | `list.size()` |
+| 访问/修改元素 | `arr[i]` / `arr[i] = x` | `list.get(i)` / `list.set(i, x)` |
+| 打印 | 只显示内存地址 | 显示完整内容 |
+
+### 相互转换
+
+```java
+// Array → ArrayList
+Point[] points1 = {new Point(1,2), new Point(3,4)};
+ArrayList<Point> points2 = new ArrayList<>(Arrays.asList(points1));
+
+// ArrayList → Array
+String[] copy = new String[words.size()];
+copy = words.toArray(copy);
+```
+
+`Arrays` 类还提供 `sort()`、`toString()` 等静态工具方法。
+
+---
+
+# CS230 异常处理 (Exceptions) 速查表
+
+## 1️⃣ 什么是异常？
+
+**异常 (Exception)** = 程序运行时打断正常执行流程的事件。
+
+- 出错时，方法会创建一个**异常对象**并"抛出"（throw）给运行时系统
+- 异常对象包含：错误信息 (message) + 方法调用栈 (call stack)
+- 如果没人处理，Java 默认处理器会打印错误信息并**终止程序**
+
+```
+Exception in thread "main" java.lang.ArithmeticException: / by zero
+    at Example1.main(Example1.java:4)
+```
+
+**常见异常举例：**
+
+| 异常类型 | 触发原因 |
+|---|---|
+| `ArithmeticException` | 除以 0 |
+| `ArrayIndexOutOfBoundsException` | 数组下标越界 |
+| `NullPointerException` | 使用未初始化的对象引用 |
+| `NumberFormatException` | 字符串转数字格式错误 |
+| `FileNotFoundException` | 找不到指定文件 |
+
+---
+
+## 2️⃣ 异常层级结构 (Hierarchy)
+
+```
+Throwable
+├── Error              ← 严重错误，程序无法恢复，不要捕获
+│   ├── OutOfMemoryError
+│   └── StackOverflowError
+└── Exception           ← 可以被捕获和处理
+    ├── IOException                    ← Checked（受检异常）
+    │   └── FileNotFoundException
+    └── RuntimeException               ← Unchecked（非受检异常）
+        ├── ArithmeticException
+        ├── NullPointerException
+        ├── ArrayIndexOutOfBoundsException
+        └── NumberFormatException
+```
+
+- **Error**：JVM 层面的严重问题（如内存不足），程序**无法恢复**，不该捕获
+- **Exception**：程序逻辑错误，**可以**捕获处理
+
+---
+
+## 3️⃣ try-catch 基本用法
+
+```java
+try {
+    // 可能出错的代码
+} catch (Exception e) {
+    // 出错时执行
+    System.out.println("Error");
+}
+System.out.println("continue...");  // 无论是否出错都会执行
+```
+
+**执行规则：**
+1. `try` 块内一旦出错，**立刻跳出**，剩余代码不执行
+2. 匹配的 `catch` 块被执行
+3. 之后程序**继续正常运行**（不会终止）
+
+---
+
+## 4️⃣ 多个 catch 块 (Multiple catch)
+
+```java
+try {
+    ...
+} catch (NumberFormatException e) {
+    System.out.println("格式错误");
+} catch (ArithmeticException e) {
+    System.out.println("计算错误");
+} catch (Exception e) {
+    System.out.println("其他异常");
+}
+```
+
+### ⚠️ 关键规则
+
+| 规则 | 说明 |
+|---|---|
+| **匹配第一个** | 运行时系统从上到下找**第一个**类型匹配的 catch，执行后跳过其余 catch |
+| **顺序很重要** | **子类异常必须写在父类前面**，否则**编译报错**（父类会"吃掉"所有子类异常） |
+| **无匹配 = 程序终止** | 若没有任何 catch 匹配，异常向上抛，最终被默认处理器终止程序 |
+| **catch (Exception e)** | 可以捕获所有异常（因为所有异常都是 Exception 子类） |
+
+✅ 正确顺序：
+```java
+catch (NumberFormatException e) {...}   // 子类在前
+catch (Exception e) {...}               // 父类在后
+```
+
+❌ 错误顺序（编译不通过）：
+```java
+catch (Exception e) {...}               // 父类在前 → 报错！
+catch (NumberFormatException e) {...}   // 子类永远不会被匹配到
+```
+
+---
+
+## 5️⃣ finally 块
+
+**finally 中的代码保证会被执行**（无论是否抛出异常，甚至有 `return`）
+
+```java
+try {
+    ...
+} catch (Exception e) {
+    ...
+} finally {
+    System.out.println("一定会执行！");
+}
+```
+
+| 情况 | finally 是否执行 |
+|---|---|
+| try 正常结束，无异常 | ✅ 执行 |
+| try 抛异常，被 catch 捕获 | ✅ 执行（在 catch 之后） |
+| try 抛异常，**没有**匹配的 catch | ✅ 执行（然后程序才终止，`finally` 后的代码不执行） |
+| catch 中有 `return` | ✅ finally 仍会先执行，然后才真正 return |
+
+📌 **用途**：清理资源（关闭文件、数据库连接等），做"善后工作"
+
+---
+
+## 6️⃣ throw vs throws（非常容易考的点！）
+
+| 关键字 | 用法 | 作用 |
+|---|---|---|
+| `throw` | 语句，在方法**内部**使用 | **主动抛出**一个异常对象 |
+| `throws` | 写在方法**声明**上 | **声明**该方法可能抛出的异常类型，交给上层调用者处理 |
+
+```java
+// throw：手动抛出异常
+if (condition) {
+    throw new Exception("发生错误");
+}
+
+// throws：方法声明可能抛出异常，不在方法内处理
+public void method1() throws IOException {
+    ...
+}
+
+public void method2() throws IOException, ArithmeticException {
+    ...
+}
+```
+
+### 该用 try-catch 还是 throws？
+
+| 情况 | 选择 |
+|---|---|
+| 知道该怎么处理错误，本地能解决 | 用 `try-catch`（程序继续运行） |
+| 不清楚该怎么处理，交给上层处理 | 用 `throws`（若一路传到 main 没人处理，程序终止） |
+
+---
+
+## 7️⃣ Checked vs Unchecked 异常
+
+| 类型 | 说明 | 例子 |
+|---|---|---|
+| **Checked（受检）** | 编译器**强制**要求 catch 或用 throws 声明，否则**编译报错** | `IOException`, `FileNotFoundException` |
+| **Unchecked（非受检）** | `RuntimeException` 及其子类，**编译器不强制**处理 | `ArithmeticException`, `NullPointerException`, `NumberFormatException` |
+
+📌 记忆法：**RuntimeException 家族 = 非受检**，其余 Exception 子类（非 RuntimeException）= 受检
+
+---
+
+## 8️⃣ 快速代码模板
+
+```java
+// 完整结构
+try {
+    // 可能出错的代码
+} catch (SpecificException e) {
+    // 处理特定异常（子类写前面）
+} catch (Exception e) {
+    // 处理其他/通用异常
+} finally {
+    // 清理代码，一定执行
+}
+```
+
+```java
+// 循环中跳过错误值继续处理
+for (String s : values) {
+    try {
+        result += Integer.parseInt(s);
+    } catch (NumberFormatException e) {
+        // 忽略无效值，continue 到下一个
+    }
+}
+```
+
+```java
+// 遇到错误立刻中止并返回当前结果
+for (String s : values) {
+    try {
+        result += Integer.parseInt(s);
+    } catch (NumberFormatException e) {
+        System.out.println("Error: Invalid value!");
+        return result;   // 直接结束方法
+    }
+}
+```
+
+---
+
+## ✅ 考试重点速记
+
+1. **异常匹配顺序**：从上到下找第一个匹配的 catch；子类必须写在父类前面
+2. **finally 永远执行**（除非 JVM 崩溃/System.exit）
+3. **throw** = 抛出一个异常实例；**throws** = 方法签名声明可能抛出的异常类型
+4. **Checked 异常**编译器强制处理；**Unchecked（RuntimeException）**不强制
+5. `catch` 参数类型必须是 `Throwable` 的子类
+6. try 块内一旦异常发生，**该行之后的代码立即跳过**
+
