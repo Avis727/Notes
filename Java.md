@@ -633,7 +633,6 @@ Point p2 = new Point(23, 94);
 2. **实例化 (Instantiation)**：`new` 关键字分配内存，返回对象引用
 3. **初始化 (Initialization)**：`new` 后紧跟构造方法调用，如 `Point(23,94)`
 
-> 💡 变量要么存basic type（int, boolean...），要么存**reference**。
 ---
 ## 4. Modifier (Visibility)
 
@@ -658,6 +657,25 @@ Point p2 = new Point(23, 94);
 | `this(...)` | 在构造方法第一行调用本类的另一个构造方法 |
 
 ---
+- `==` 比较地址
+- `.equals()` 比较值
+```java
+@Override
+public boolean equals(Object obj) {
+
+    if (this == obj)
+        return true;
+
+    if (!(obj instanceof ClassName))
+        return false;
+
+    ClassName other = (ClassName)obj;
+
+    return field1 == other.field1
+        && field2 == other.field2
+        && field3 == other.field3;
+}
+```
 
 ## 9. enum（枚举）
 
@@ -679,19 +697,13 @@ enum Size {
 }
 ```
 
-**Methods**
+**Enum Methods**
 ```java
-Size s = Size.SMALL;
-.getPrice();      // 3.0
-.ordinal();        // 0 （常量的位置序号，从0开始）
-.toString();       // "SMALL"
-Size.valueOf("LARGE");   // 返回 Size.LARGE
-Size.values();       // 返回包含所有常量的 array
+EnumName.CONSTANT.ordinal();        // 0 （常量的位置，从0开始）
+EnumName.CONSTANT.toString();       // "SMALL"
+EnumName.valueOf("CONSTANT");   // 返回 Size.LARGE
+EnumName.values();       // 返回包含所有常量的 array
 ```
-
-**enum 要点：**
-- 常量顺序决定 `ordinal()` 的值
-
 ---
 
 ## 10. 常见易错点
