@@ -122,19 +122,11 @@ true false //小写
 - 除了primitive type 都是 reference type
 - 存储 address。
 - 可被调用method
-- array class enumeration（代表一组 constants 的 class）
 ```Java
-className variableName = new createClassObject(参数)
+className variableName = new ClassName(参数)
 
 String s1 = new String("candide");
 String s2 = s1.replace('d', 'p'); // 创建了新的string
-
-enum EnumerationName{
-    LOW,
-    MEDIUM,
-    HIGH
-};
-EnumerationName myVar = EnumerationName.MEDIUM;
 ```
 
 - Reference Type：memory里是地址，赋值时多个变量指向同一个对象（地址）
@@ -142,16 +134,6 @@ EnumerationName myVar = EnumerationName.MEDIUM;
 
 ## 类型转换
 ### Implicit 小 - 大：直接换
-
-```Java
-double d = 4.9;
-int i = 10;
-double d1, d2;
-
-d1 = i; // d1=10.0
-d2 = (double) i;
-```
-
 ### explicit 大 - 小：加（类型）
 ```Java
 double d = 4.9;
@@ -162,11 +144,9 @@ int i2= (int) d;
 ## Console Output
 ### printf() & printIn()
 ```Java
-System.out.printf("模板", 值，值，值);
+System.out.printf("模板", 值，值);
 System.out.println("内容")// 自动换行
 ```
-Format：%（格式开始符）+ 转换符
-
 `%[对齐方式：-是左对齐，什么都不加是右对齐][width：一个整数][.precision][参数大小]转换符`
 ![](/images/Java_2026-07-22-19-08-15.png)
 
@@ -204,7 +184,10 @@ public class [fileName]{
 
 # Lab 02
 ## Operator
-Arithmetic：+ - * / % （注意：* /如果两个运算数都是int，结果自动只保留 int part; + 遇见 string 自动变拼接； %结果符号和被除数一致）
+Arithmetic：+ - * / %
+ - `* /`如果两个运算数都是int，结果自动只保留 int part
+- `+` 遇见 string 自动变拼接
+- %结果符号和被除数一致）
 
 Unary：+（正） -（负） ++（自增1） --（自减1） !（BOOL取反）
 - i++：先赋值，再自增
@@ -260,17 +243,15 @@ switch (parameter)
 ```
 # Lab03 Loop & Methods
 
-## 1. while 语句（不计数控制循环）
+## 1. while（不知循环次数
 
 ```java
 while (condition) {
     statement;
 }
 ```
-- 条件一开始为 `false` → 循环体**一次都不执行**。
+## 3. for（知循环次数
 
-
-## 3. for 语句（计数控制循环）
 
 ```java
 for (initialization; loopContinuationCondition; increment)
@@ -288,7 +269,6 @@ for (initialization; loopContinuationCondition; increment)
   int total = 1, number = 2;
   for (; number <= 20; total += number, number += 2); // 空语句
   ```
-- 步进可以是负数（递减循环）。
 ---
 
 ## 4. do...while 语句
@@ -486,6 +466,8 @@ int[] a = new int[]{1, 2, 3};
 ## 3. Methods
 ```java
 Arrays.toString(array)
+Arrays.sort()
+
 ```
 ## 3. 遍历数组
 ```java
@@ -499,7 +481,7 @@ for (int v : arr) System.out.println(v);
 ## 4. 数组比较与拷贝
 | 操作 | 效果 |
 |---|---|
-| `a == b` | 比较**引用**（地址），不是内容 |
+| `a == b` | 比较地址，不是内容 |
 | `a.equals(b)` | ⚠️ 数组未重写 equals，等价于 `==`，不要用来比较内容 |
 | `Arrays.equals(a, b)` | 正确比较**元素内容** |
 | `a = b` | 只复制引用，两个变量指向同一数组 |
@@ -714,13 +696,13 @@ EnumName.values();       // 返回包含所有常量的 array
 
 ---
 
-# Java ArrayList 速查表 (CompSci 230)
+# Lab 06 ArrayList 
 
-## 1. 基本概念
 
-- `ArrayList` 属于 **集合(Collection)**，用于存储对象，自动管理增删改查
-- 只能存储 **对象**，不能直接存储基本数据类型（int、boolean等）
-- 有两个关键属性：
+- 只能存储 **对象**，不能直接存储primitive（int、boolean等）
+- 只能加入指定类型的对象
+
+- Attributes：
   - **size**：当前实际存储的元素个数
   - **capacity**：内部数组分配的容量（可自动扩容）
 
@@ -728,33 +710,20 @@ EnumName.values();       // 返回包含所有常量的 array
 import java.util.ArrayList;
 
 ArrayList<String> list = new ArrayList<String>();
-list.add("apple");
 
-ArrayList<Integer> nums = new ArrayList<Integer>();
+List<String> names = new ArrayList<>();
 ```
 
 ---
 
-## 2. 泛型 (Generics)
-
-- `<E>` 是占位符，创建时指定存储的数据类型
-- Java 5 起推荐写法：
-
-```java
-ArrayList<String> words = new ArrayList<String>();
-```
-
-- ⚠️ 旧写法 `ArrayList words = new ArrayList();` 不推荐（无类型检查）
-- 只能加入指定类型的对象，加入其他类型会报错
-
----
-
-## 3. 常用方法一览
+## 3. Instance Methods
+- `<E>` 是占位符，创建数据类型
 
 | 方法 | 作用 |
 |---|---|
-| `add(E x)` | 在末尾添加元素 |
+| `.add(E x)` | 在末尾添加元素 |
 | `add(int index, E x)` | 在指定位置插入元素，其余元素后移 |
+| `Collections.addAll(list, 元素，元素)` | 加入多个元素
 | `get(int index)` | 获取指定位置的元素 |
 | `set(int index, E x)` | 替换指定位置的元素，返回旧元素 |
 | `remove(int index)` | 按索引删除元素，返回被删除元素 |
@@ -766,12 +735,9 @@ ArrayList<String> words = new ArrayList<String>();
 | `isEmpty()` | 是否为空 |
 | `clear()` | 清空所有元素 |
 | `toString()` | 转成字符串，如 `[One, Two, Three]` |
+| `toArray()` | ArrayList -> Array
 | `trimToSize()` | 把容量裁剪到当前元素个数 |
 | `equals(Object o)` | 大小和元素顺序都相同才为true |
-
-### 索引越界
-`get()` / `set()` / `remove(int)` 的 index 必须满足 `0 <= index < size()`，否则抛出 `IndexOutOfBoundsException`
-
 ---
 
 ## 4. 遍历方式
@@ -790,7 +756,7 @@ for (String value : list) {
 
 ---
 
-## 5. 包装类 (Wrapper Classes)
+## 5. Wrapper Classes
 
 基本类型不是对象，需要包装类转换：
 
@@ -808,14 +774,14 @@ for (String value : list) {
 ### 常用转换方法
 
 ```java
-// 值/字符串 → 对象
+// int值/字符串 → 对象
 Integer i1 = Integer.valueOf(42);
 Integer i2 = Integer.valueOf("42");
 
-// 对象 → 值
+// 对象 → int值
 System.out.println(i1.intValue());   // 42
 
-// 字符串 → 值 (parse)
+// 字符串 → int值 (parse)
 Integer.parseInt("42");        // 42
 Boolean.parseBoolean("true");  // true
 Double.parseDouble("2.71");    // 2.71
@@ -858,20 +824,9 @@ String[] copy = new String[words.size()];
 copy = words.toArray(copy);
 ```
 
-`Arrays` 类还提供 `sort()`、`toString()` 等静态工具方法。
-
 ---
 
-# CS230 异常处理 (Exceptions) 速查表
-
-## 1️⃣ 什么是异常？
-
-**异常 (Exception)** = 程序运行时打断正常执行流程的事件。
-
-- 出错时，方法会创建一个**异常对象**并"抛出"（throw）给运行时系统
-- 异常对象包含：错误信息 (message) + 方法调用栈 (call stack)
-- 如果没人处理，Java 默认处理器会打印错误信息并**终止程序**
-
+# Exceptions
 ```
 Exception in thread "main" java.lang.ArithmeticException: / by zero
     at Example1.main(Example1.java:4)
@@ -905,10 +860,6 @@ Throwable
         ├── ArrayIndexOutOfBoundsException
         └── NumberFormatException
 ```
-
-- **Error**：JVM 层面的严重问题（如内存不足），程序**无法恢复**，不该捕获
-- **Exception**：程序逻辑错误，**可以**捕获处理
-
 ---
 
 ## 3️⃣ try-catch 基本用法
@@ -949,25 +900,12 @@ try {
 | 规则 | 说明 |
 |---|---|
 | **匹配第一个** | 运行时系统从上到下找**第一个**类型匹配的 catch，执行后跳过其余 catch |
-| **顺序很重要** | **子类异常必须写在父类前面**，否则**编译报错**（父类会"吃掉"所有子类异常） |
-| **无匹配 = 程序终止** | 若没有任何 catch 匹配，异常向上抛，最终被默认处理器终止程序 |
+| **顺序很重要** | **子类异常必须写在父类前面** |
 | **catch (Exception e)** | 可以捕获所有异常（因为所有异常都是 Exception 子类） |
-
-✅ 正确顺序：
-```java
-catch (NumberFormatException e) {...}   // 子类在前
-catch (Exception e) {...}               // 父类在后
-```
-
-❌ 错误顺序（编译不通过）：
-```java
-catch (Exception e) {...}               // 父类在前 → 报错！
-catch (NumberFormatException e) {...}   // 子类永远不会被匹配到
-```
 
 ---
 
-## 5️⃣ finally 块
+## 5️⃣ finally 
 
 **finally 中的代码保证会被执行**（无论是否抛出异常，甚至有 `return`）
 
@@ -983,8 +921,6 @@ try {
 
 | 情况 | finally 是否执行 |
 |---|---|
-| try 正常结束，无异常 | ✅ 执行 |
-| try 抛异常，被 catch 捕获 | ✅ 执行（在 catch 之后） |
 | try 抛异常，**没有**匹配的 catch | ✅ 执行（然后程序才终止，`finally` 后的代码不执行） |
 | catch 中有 `return` | ✅ finally 仍会先执行，然后才真正 return |
 
@@ -1073,14 +1009,4 @@ for (String s : values) {
 }
 ```
 
----
-
-## ✅ 考试重点速记
-
-1. **异常匹配顺序**：从上到下找第一个匹配的 catch；子类必须写在父类前面
-2. **finally 永远执行**（除非 JVM 崩溃/System.exit）
-3. **throw** = 抛出一个异常实例；**throws** = 方法签名声明可能抛出的异常类型
-4. **Checked 异常**编译器强制处理；**Unchecked（RuntimeException）**不强制
-5. `catch` 参数类型必须是 `Throwable` 的子类
-6. try 块内一旦异常发生，**该行之后的代码立即跳过**
 
