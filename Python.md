@@ -35,7 +35,7 @@ def test_that_passes():
 ```python
 import pytest
 
-@pytest.fixture
+@pytest.fixture # CONSTRUCTR
 def new_list():
     return list()
 
